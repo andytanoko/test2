@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="test.css">
+<style>
+
+</style>
+<head>
+
+</head>
+<body>
+<div class="w3-container">
+  <h2>My Progress Bar</h2>
+
+  
+  <div class="bar-container" id="bar1">
+  </div>
+  
+  <hr>
+  <div class="bar-container" id="bar2">
+  </div>
+	<hr>
+  <div class="bar-container" id="bar3">
+  </div>
+
+  
+  <br>
+
+  <select id="progrestList" name="progrestList" form="carform" onclick="selector.update(this)" >
+	<option value="0">Bar 1</option>
+	<option value="1">Bar 2</option>
+	<option value="2">Bar 3</option>
+</select>
+  
+  
+  <button class="w3-button" onclick="selector.move(-25)">-25</button> 
+  <button class="w3-button" onclick="selector.move(-10)">-10</button> 
+  <button class="w3-button" onclick="selector.move(+10)">+10</button> 
+  <button class="w3-button" onclick="selector.move(+25)">+25</button> 
+</div>
+
+
+
+
+
+<script>
+
+
+
+class Bar
+{
+	
+
+	constructor (elem)
+	{
+		this.loadDoc();
+		elem.innerHTML='<div  class="bar-progress" style="width:0%"></div>' 
+			+	'<div  class="bar-text" style="position:absolute;top:0;left:0;width:100%;text-align:center"></div>';
+		this.elem = elem.children[0]; 
+		this.elemText = elem.children[1];
+		this.width = 0;
+		this.target =0;
+		this.elemText.innerHTML= this.elem.style.width;
+		this.limit = 100;
+		//this.elemText.innerHTML= this.bean;
+		
+	}
+
+	loadDoc() {
+		var xhttp = new XMLHttpRequest();
+		var bar = this;
+		xhttp.onreadystatechange=function() {
+		if (this.readyState == 4 && this.status == 200) {
+			bar.bean=JSON.parse(this.responseText);
+			bar.limit = bar.bean.limit;
+		}
+		};
+		xhttp.open("GET", "http://pb-api.herokuapp.com/bars" , true);
+		xhttp.send();
+	}
+	move(delta)
+	{
+	  this.target =this.target +delta;
+	  var bar = this;
+	  var id = setInterval(frame, 10);
+	  
+	  
+	  var str = bar.elem.style.width; 
+	  var w =  0;
+	  if (str.endsWith("%"))
+	  { w= str.substr(0,str.length-1); }
+	  
+	  
+	  function frame() {
+		if (w >= bar.target) {
+		  clearInterval(id);
+		} else {
+		  w++; 
+		  bar.elem.style.width =  w + '%'; 
+		  bar.elemText.innerHTML= bar.elem.style.width;
+		}
+	  }
+	}
+	
+	
+	
+}
+
+class Selector
+{
+	constructor(document, allElementName)
+	{
+		
+		this.allElement = [];
+		this.bar = [];
+		for ( var i=0;i<=2;i++)
+		{
+			this.allElement [i] = document.getElementById(allElementName[i]);
+			this.bar [i] = new Bar(this.allElement [i]);
+		}
+		this.currentIdx=0;
+	}
+	
+	move(val)
+	{
+		this.bar[this.currentIdx].move(val);
+	}
+	
+	
+	update(obj)
+	{
+		this.currentIdx=obj.value;
+	}
+
+}
+
+
+const allElement = ['bar1','bar2','bar3']
+let selector = new Selector(document,allElement);
+</script>
+
+
+
+</body>
+</html> 
