@@ -1,0 +1,32 @@
+{
+  "name": "st-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node spec",
+    "build": "webpack --progress --mode=production",
+    "watch": "webpack --progress --watch",
+    "server": "webpack-dev-server --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andytanoko/test2.git"
+  },
+  "author": "andytanoko@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andytanoko/test2/issues"
+  },
+  "homepage": "https://github.com/andytanoko/test2#readme",
+  "devDependencies": {
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "jasmine-node": "^1.16.2",
+    "request": "^2.88.0"
+  }
+}
